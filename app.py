@@ -503,7 +503,7 @@ BASE_TEMPLATE = '''
       height: 4px;
     }
     .button-group { margin-top: 10px; }
-    
+
     /* Algorithm Selector Styling */
     .algorithm-selector {
       display: flex;
@@ -515,35 +515,35 @@ BASE_TEMPLATE = '''
       border-radius: 12px;
       flex-wrap: wrap;
     }
-    
-    .algorithm-selector label {
+
+    .algorithm-selector > label {
       font-weight: 600;
       color: #4a5568;
       font-size: 1rem;
       min-width: 140px;
     }
-    
+
     .algorithm-options {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
     }
-    
+
     .algorithm-option {
       position: relative;
     }
-    
-    .algorithm-option input[type="radio"] {
+
+    .algorithm-option input[type="checkbox"] {
       position: absolute;
       opacity: 0;
       cursor: pointer;
     }
-    
+
     .algorithm-option label {
       display: inline-block;
       padding: 10px 20px;
       background: white;
-      border: 2px solid #e2e8f0;
+      border: 3px solid #e2e8f0;
       border-radius: 8px;
       cursor: pointer;
       font-weight: 500;
@@ -555,26 +555,83 @@ BASE_TEMPLATE = '''
       text-align: center;
       margin: 0;
     }
-    
-    .algorithm-option input[type="radio"]:checked + label {
+
+    /* A* Star - Purple */
+    .algorithm-option:nth-child(1) input[type="checkbox"]:checked + label {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       border-color: #667eea;
       box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
       transform: translateY(-2px);
     }
-    
+
+    /* Dijkstra - Blue */
+    .algorithm-option:nth-child(2) input[type="checkbox"]:checked + label {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      border-color: #4facfe;
+      box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
+      transform: translateY(-2px);
+    }
+
+    /* UCS - Green */
+    .algorithm-option:nth-child(3) input[type="checkbox"]:checked + label {
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      color: white;
+      border-color: #43e97b;
+      box-shadow: 0 4px 12px rgba(67, 233, 123, 0.4);
+      transform: translateY(-2px);
+    }
+
+    /* BFS - Orange */
+    .algorithm-option:nth-child(4) input[type="checkbox"]:checked + label {
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      color: white;
+      border-color: #fa709a;
+      box-shadow: 0 4px 12px rgba(250, 112, 154, 0.4);
+      transform: translateY(-2px);
+    }
+
     .algorithm-option label:hover {
       border-color: #667eea;
       box-shadow: 0 4px 8px rgba(102, 126, 234, 0.2);
     }
-    
+
     .algorithm-info {
       font-size: 12px;
       color: #718096;
       margin-top: 8px;
       font-style: italic;
     }
+
+    /* Algorithm Legend */
+    .algorithm-legend {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      padding: 10px 15px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-color {
+      width: 20px;
+      height: 4px;
+      border-radius: 2px;
+    }
+
+    .legend-color.astar { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .legend-color.dijkstra { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+    .legend-color.ucs { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+    .legend-color.bfs { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
   </style>
 </head>
 <body>
@@ -594,27 +651,33 @@ BASE_TEMPLATE = '''
       </div>
       
       <div class="algorithm-selector">
-        <label>Algorithm:</label>
+        <label>Algorithms:</label>
         <div class="algorithm-options">
           <div class="algorithm-option">
-            <input type="radio" id="algo-astar" name="algorithm" value="astar" checked>
+            <input type="checkbox" id="algo-astar" name="algorithm" value="astar" checked>
             <label for="algo-astar">A* Star</label>
           </div>
           <div class="algorithm-option">
-            <input type="radio" id="algo-dijkstra" name="algorithm" value="dijkstra">
+            <input type="checkbox" id="algo-dijkstra" name="algorithm" value="dijkstra">
             <label for="algo-dijkstra">Dijkstra</label>
           </div>
           <div class="algorithm-option">
-            <input type="radio" id="algo-ucs" name="algorithm" value="ucs">
+            <input type="checkbox" id="algo-ucs" name="algorithm" value="ucs">
             <label for="algo-ucs">UCS</label>
           </div>
           <div class="algorithm-option">
-            <input type="radio" id="algo-bfs" name="algorithm" value="bfs">
+            <input type="checkbox" id="algo-bfs" name="algorithm" value="bfs">
             <label for="algo-bfs">BFS</label>
           </div>
         </div>
       </div>
-      <p class="algorithm-info">A*: Fast & optimal | Dijkstra/UCS: Guaranteed shortest | BFS: Fastest but not optimal</p>
+      <p class="algorithm-info">Select one or more algorithms to compare their paths</p>
+      <div class="algorithm-legend" id="algorithm-legend" style="display: none;">
+        <div class="legend-item"><div class="legend-color astar"></div><span>A* Star</span></div>
+        <div class="legend-item"><div class="legend-color dijkstra"></div><span>Dijkstra</span></div>
+        <div class="legend-item"><div class="legend-color ucs"></div><span>UCS</span></div>
+        <div class="legend-item"><div class="legend-color bfs"></div><span>BFS</span></div>
+      </div>
       
       <div class="form-group">
         <button id="find-path-btn" disabled>Find Shortest Path</button>
@@ -649,7 +712,7 @@ BASE_TEMPLATE = '''
       let map = null;
       let startMarker = null;
       let endMarker = null;
-      let pathLayer = null;
+      let pathLayers = [];
       let nodesLayer = null;
       let isRegionLoaded = false;
       let areNodesVisible = true;
@@ -772,40 +835,96 @@ BASE_TEMPLATE = '''
           statusDiv.textContent = 'Select both start and end points.';
           return;
         }
-        statusDiv.textContent = 'Calculating shortest path...';
+
+        // Get selected algorithms
+        const selectedAlgorithms = Array.from(document.querySelectorAll('input[name="algorithm"]:checked'))
+          .map(cb => cb.value);
+
+        if (selectedAlgorithms.length === 0) {
+          statusDiv.textContent = 'Please select at least one algorithm.';
+          return;
+        }
+
+        statusDiv.textContent = `Calculating paths with ${selectedAlgorithms.length} algorithm(s)...`;
         findPathBtn.disabled = true;
-        
-        // Get selected algorithm
-        const selectedAlgorithm = document.querySelector('input[name="algorithm"]:checked').value;
-        
-        const formData = new FormData();
-        formData.append('start_lat', startMarker.getLatLng().lat);
-        formData.append('start_lng', startMarker.getLatLng().lng);
-        formData.append('end_lat', endMarker.getLatLng().lat);
-        formData.append('end_lng', endMarker.getLatLng().lng);
-        formData.append('algorithm', selectedAlgorithm);
-        fetch('/find_path', {
-          method: 'POST',
-          body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-          findPathBtn.disabled = false;
-          if (data.success) {
-            if (pathLayer) { map.removeLayer(pathLayer); }
-            pathLayer = L.polyline(data.path, { color: 'red', weight: 5, opacity: 0.7 }).addTo(map);
-            map.fitBounds(pathLayer.getBounds(), { padding: [50, 50] });
-            statusDiv.textContent = data.message;
-            pathInfoDiv.textContent = `Algorithm: ${data.algorithm || 'N/A'} | Path length: ${data.length}`;
-          } else {
-            statusDiv.textContent = data.message;
-            pathInfoDiv.textContent = '';
-          }
-        })
-        .catch(error => {
-          findPathBtn.disabled = false;
-          console.error('Error:', error);
-          statusDiv.textContent = 'Error finding path.';
+
+        // Clear previous paths
+        if (pathLayers) {
+          pathLayers.forEach(layer => map.removeLayer(layer));
+          pathLayers = [];
+        }
+
+        // Show legend
+        document.getElementById('algorithm-legend').style.display = 'flex';
+
+        // Process each algorithm
+        const results = [];
+        let completed = 0;
+
+        selectedAlgorithms.forEach(algorithm => {
+          const formData = new FormData();
+          formData.append('start_lat', startMarker.getLatLng().lat);
+          formData.append('start_lng', startMarker.getLatLng().lng);
+          formData.append('end_lat', endMarker.getLatLng().lat);
+          formData.append('end_lng', endMarker.getLatLng().lng);
+          formData.append('algorithm', algorithm);
+
+          fetch('/find_path', {
+            method: 'POST',
+            body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+            completed++;
+            if (data.success) {
+              const colors = {
+                'astar': '#667eea',
+                'dijkstra': '#4facfe',
+                'ucs': '#43e97b',
+                'bfs': '#fa709a'
+              };
+              const pathColor = colors[algorithm] || '#ff0000';
+              const polyline = L.polyline(data.path, { 
+                color: pathColor, 
+                weight: 5, 
+                opacity: 0.8 
+              }).addTo(map);
+              pathLayers.push(polyline);
+
+              // Add label for the path
+              const midpoint = Math.floor(data.path.length / 2);
+              const labelPos = data.path[midpoint] || data.path[0];
+              const marker = L.marker(labelPos, {
+                icon: L.divIcon({
+                  className: 'algorithm-label',
+                  html: `<div style="background: ${pathColor}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${algorithm.toUpperCase()}: ${data.length}</div>`,
+                  iconSize: [100, 30],
+                  iconAnchor: [50, 15]
+                })
+              }).addTo(map);
+              pathLayers.push(marker);
+
+              results.push(`${algorithm.toUpperCase()}: ${data.length}`);
+            }
+            if (completed === selectedAlgorithms.length) {
+              findPathBtn.disabled = false;
+              statusDiv.textContent = `Found ${completed} path(s). Compare the results!`;
+              pathInfoDiv.textContent = results.join(' | ');
+              // Fit map to show all paths
+              if (pathLayers.length > 0) {
+                const group = L.featureGroup(pathLayers.filter(l => l instanceof L.Polyline));
+                map.fitBounds(group.getBounds(), { padding: [50, 50] });
+              }
+            }
+          })
+          .catch(error => {
+            completed++;
+            console.error('Error:', error);
+            if (completed === selectedAlgorithms.length) {
+              findPathBtn.disabled = false;
+              statusDiv.textContent = 'Some paths failed to calculate.';
+            }
+          });
         });
       });
 
@@ -814,7 +933,11 @@ BASE_TEMPLATE = '''
       function resetPoints() {
         if (startMarker) { map.removeLayer(startMarker); startMarker = null; }
         if (endMarker) { map.removeLayer(endMarker); endMarker = null; }
-        if (pathLayer) { map.removeLayer(pathLayer); pathLayer = null; }
+        if (pathLayers) {
+          pathLayers.forEach(layer => map.removeLayer(layer));
+          pathLayers = [];
+        }
+        document.getElementById('algorithm-legend').style.display = 'none';
         findPathBtn.disabled = true;
         pathInfoDiv.textContent = '';
         if (isRegionLoaded) {
